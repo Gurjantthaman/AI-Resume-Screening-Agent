@@ -77,7 +77,7 @@
         },
         "documentId": {
           "__rl": true,
-          "value": "1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8",
+          "value": ""YOUR_JOB_SHEET_ID"",
           "mode": "list",
           "cachedResultName": "Recruiter Job Form Data",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8/edit?usp=drivesdk"
@@ -572,7 +572,7 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM",
+          "value": "YOUR_CANDIDATE_SHEET_ID",
           "mode": "list",
           "cachedResultName": "Candidate Job Form (Responses)",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit?usp=drivesdk"
