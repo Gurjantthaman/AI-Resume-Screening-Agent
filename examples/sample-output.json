@@ -1,1 +1,24 @@
-
+[
+  {
+    "job_id": "JOB-1787125335287",
+    "timestamp": "8/17/2026 12:12:00",
+    "candidate_name": "Gurjant Thaman",
+    "email": "khatrigurjant@gmail.com",
+    "phone_number": 7814284983,
+    "job_applied_for": "Python Developer",
+    "resume": "https://drive.google.com/open?id=1G7ASc3hXg1vGPfB7A_R1yModHu5qFlCZ",
+    "match_score": 83,
+    "skills_score": 45,
+    "experience_score": 20,
+    "role_relevance_score": 18,
+    "recommendation": "Strong Match",
+    "confidence": "High",
+    "experience_match": true,
+    "relevant_experience": "1 year 4 months",
+    "matching_skills": "Python, SQL, OpenAI API, Prompt Engineering, LLM-based Automation, Make.com (Integromat), n8n, REST APIs, Webhooks, JSON Parsing, Postman, Google Sheets",
+    "missing_skills": "",
+    "evidence": "Worked as Trainee Software Developer (AI & Automation) at VIENNA Advantage from April 2025 to Present (August 2026) | Automated workflows in VIENNA Advantage ERP ecosystem using Make.com and n8n | Built AI-driven email classification and response systems using OpenAI APIs | Developed lead management and WhatsApp AI automation projects integrating APIs and conversational flows | Holds Oracle Gen AI Professional, AWS Cloud Practitioner Essentials, and Oracle AI Foundation Associate certifications",
+    "strengths": "Direct hands-on experience in AI workflow automation using Make.com, n8n, and OpenAI APIs | Strong foundation in Python, REST APIs, Webhooks, and Prompt Engineering | Relevant professional certifications in AI and Cloud | Demonstrated ability to build end-to-end automation systems and lead scoring tools",
+    "concerns": "Relatively short total professional tenure (approx. 1 year 4 months) | Current title is Trainee Software Developer, reflecting early-career level"
+  }
+]
