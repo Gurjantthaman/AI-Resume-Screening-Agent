@@ -1,0 +1,1484 @@
+{
+  "name": "AI Resume Screening & Job Matching Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "99a7735e-8273-415f-94c9-32397dd89a79",
+              "name": "Job ID",
+              "value": "=JOB-{{ $now.toMillis() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        -336
+      ],
+      "id": "559ab11a-6974-4bf4-9770-de888430a115",
+      "name": "Added Job ID Field"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM",
+          "mode": "list",
+          "cachedResultName": "Candidate Job Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 219536644,
+          "mode": "list",
+          "cachedResultName": "Candidate Form Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit#gid=219536644"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        0
+      ],
+      "id": "707a39c0-1b11-4401-990d-9df29912361a",
+      "name": "New Candidate Data Added (Google Sheets Trigger)",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "XcYF2MslLggOOYZP",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8",
+          "mode": "list",
+          "cachedResultName": "Recruiter Job Form Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 292431707,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8/edit#gid=292431707"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -336
+      ],
+      "id": "f1b35021-9a39-4aad-a162-6852ce815d47",
+      "name": "New Post Or JD Added(Google Sheets Trigger)",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "XcYF2MslLggOOYZP",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dd62098a-e1e4-4083-b069-01757fc4d76d",
+              "name": "Pdf File ID",
+              "value": "={{ $json.Resume.split('id=')[1] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "118da8c0-8abd-43c2-a20b-3cd1f149a6f6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        304,
+        0
+      ],
+      "id": "e8b23fad-d5fb-46af-b4ef-974e21d871ef",
+      "name": "Extract Pdf Data"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json['Pdf File ID'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        80,
+        0
+      ],
+      "id": "6910200c-bc6d-48f3-9c60-4547222b945c",
+      "name": "Download Pdf file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "wus9oLPZOdxLmiwY",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8",
+          "mode": "list",
+          "cachedResultName": "Recruiter Job Form Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727714070,
+          "mode": "list",
+          "cachedResultName": "Jobs Info",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8/edit#gid=1727714070"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.Timestamp }}",
+            "  Job Title  ": "={{ $json['  Job Title  '] }}",
+            "Required Skills": "={{ $json['Required Skills'] }}",
+            "Job Description": "={{ $json['Job Description'] }}",
+            "Job ID": "={{ $json['Job ID'] }}",
+            "Location": "={{ $json.Location }}",
+            "  Minimum Experience (years)  ": "={{ $json['  Minimum Experience (years)  '] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "  Job Title  ",
+              "displayName": "  Job Title  ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Description",
+              "displayName": "Job Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Required Skills",
+              "displayName": "Required Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "  Minimum Experience (years)  ",
+              "displayName": "  Minimum Experience (years)  ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        80,
+        -336
+      ],
+      "id": "7408f550-c931-47be-87e3-681bb71f4d20",
+      "name": "Append New Post Data in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "T7X5y8VG4Z3sB00D",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8",
+          "mode": "list",
+          "cachedResultName": "Recruiter Job Form Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727714070,
+          "mode": "list",
+          "cachedResultName": "Jobs Info",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1aBdtaJzt7YeuIvJ5C6xNxls5MGUlBjWYPr-oIPIQ4V8/edit#gid=1727714070"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "  Job Title  ",
+              "lookupValue": "={{ $('New Candidate Data Added (Google Sheets Trigger)').item.json['Job Applied For'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        0
+      ],
+      "id": "63b80c59-a60c-4a46-8f6f-aa6b2a7497ca",
+      "name": "Get Job Description from sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "T7X5y8VG4Z3sB00D",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $json.output;\n\nconst result = JSON.parse(text);\n\nreturn {\n  json: result\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        0
+      ],
+      "id": "46d8a38c-6bd8-4ce0-86bf-e5f985bd2d90",
+      "name": "Clean Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ai = $json;\n\nconst candidate = $('New Candidate Data Added (Google Sheets Trigger)').first().json;\nconst job = $('Get Job Description from sheet').first().json;\n\nreturn {\n  json: {\n    job_id: job['Job ID'],\n    timestamp: candidate['Timestamp'],\n\n    candidate_name: ai.candidate_name,\n    email: candidate.Email,\n    phone_number: candidate['Phone Number'],\n    job_applied_for: candidate['Job Applied For'],\n    resume: candidate.Resume,\n\n    match_score: ai.match_score,\n\n    skills_score: ai.score_breakdown.skills_match,\n    experience_score: ai.score_breakdown.experience_match,\n    role_relevance_score: ai.score_breakdown.role_relevance,\n\n    recommendation: ai.recommendation,\n    confidence: ai.confidence,\n\n    experience_match: ai.experience_match,\n    relevant_experience: ai.relevant_experience,\n\n    matching_skills: ai.matching_skills.join(', '),\n    missing_skills: ai.missing_skills.join(', '),\n\n    evidence: ai.evidence.join(' | '),\n    strengths: ai.strengths.join(' | '),\n    concerns: ai.concerns.join(' | ')\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        0
+      ],
+      "id": "95e795b7-fda9-41c4-8674-27e59103a258",
+      "name": "All info added and cleaned"
+    },
+    {
+      "parameters": {
+        "content": "                            Recruiter Job Description Automation\n                               To store Data in Google Sheet",
+        "height": 304,
+        "width": 768
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -416,
+        -448
+      ],
+      "typeVersion": 1,
+      "id": "cfa7d4a5-b278-41ec-bfa1-b2c948ac249d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "      Download Pdf And Extract Data",
+        "height": 256,
+        "width": 416
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        32,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "c1e211ff-7828-4ad3-a178-9f9c8f0f5c54",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "        New Candidate Data Recieved",
+        "height": 256,
+        "width": 416
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -416,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "8d5458fd-9905-43a5-b1b0-80a0b39a161f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "                Get Job Description And \n      Match Job Description With Candidate data Using AI",
+        "height": 256,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        480,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "132a80ac-5e62-48d1-ac94-ae1a839ed408",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "            Clean Data And Combine Candidate + AI Result",
+        "height": 256,
+        "width": 688
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1072,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "fe29ca06-7b33-4a2d-adaa-a3c2f25038bc",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=CANDIDATE RESUME:\n{{ $('Extract Pdf Data').item.json.text }}\n\nJob Title:\n{{ $('Get Job Description from sheet').item.json['  Job Title  '] }}\n\nJob Description:\n{{ $('Get Job Description from sheet').item.json['Job Description'] }}\n\nRequired Skills:\n{{ $('Get Job Description from sheet').item.json['Required Skills'] }}\n\nMinimum Experience:\n{{ $('Get Job Description from sheet').item.json['  Minimum Experience (years)  '] }}\n\nLocation:\n{{ $('Get Job Description from sheet').item.json.Location }}",
+        "options": {
+          "systemMessage": "You are an AI Candidate Screening Agent.\n\nYour job is to evaluate a candidate's resume against a specific job and make an evidence-based screening recommendation.\n\nYou have been provided with:\n\nJOB INFORMATION\nJob Title:\n{{ $json['  Job Title  '] }}\n\nJob Description:\n{{ $json['Job Description'] }}\n\nRequired Skills:\n{{ $json['Required Skills'] }}\n\nMinimum Experience:\n{{ $json['  Minimum Experience (years)  '] }}\n\nLocation:\n{{ $json.Location }}\n\nCANDIDATE RESUME\n{{ $('Extract Pdf Data').item.json.text }}\n\nYOUR TASK\n\nAnalyze the candidate against the job requirements.\n\nFollow this process:\n\n1. Identify the important requirements from the job description and required skills.\n2. Identify skills and experience explicitly demonstrated in the resume.\n3. Compare the candidate against each important requirement.\n4. Determine which requirements are clearly matched, partially matched, or not demonstrated.\n5. Calculate an overall match score from 0–100 based only on evidence in the resume.\n6. Evaluate whether the candidate meets the minimum relevant experience requirement.\n7. Identify strengths, concerns, and missing requirements.\n8. Make a final recommendation.\n9. If the evidence is insufficient or the candidate is borderline, recommend \"Review\" instead of making an overly confident decision.\n\nSCORING\n\nUse this scoring structure:\n\n- Skills Match: 50 points\n- Relevant Experience: 30 points\n- Job/Role Relevance: 20 points\n\nThe final match_score must equal the sum of these three components.\n\nDo not award points for skills or experience that are not supported by the resume.\n\nEXPERIENCE RULES\n\nCalculate relevant professional experience from explicit employment dates in the resume.\n\nIf an employment period says \"April 2025 – Present\", calculate the experience from April 2025 until the current date.\n\nCurrent date: 2026-08-21.\n\nDo not automatically reject experience because the candidate's job title contains words such as \"Trainee\", \"Intern\", or \"Junior\".\n\nJudge whether the actual responsibilities and work performed are relevant to the target role.\n\nEVIDENCE RULES\n\nEvery important conclusion should be supported by information present in the resume.\n\nDo not invent:\n- Skills\n- Experience\n- Qualifications\n- Employment history\n- Certifications\n- Responsibilities\n\nIf something is not demonstrated in the resume, treat it as \"Not Demonstrated\".\n\nRECOMMENDATION RULES\n\nUse exactly one of:\n\n\"Strong Match\"\n\"Review\"\n\"Low Match\"\n\nUse \"Strong Match\" when the candidate clearly satisfies most important requirements.\n\nUse \"Review\" when there is meaningful uncertainty, borderline experience, missing important information, or a mixed match.\n\nUse \"Low Match\" when the candidate clearly fails important requirements.\n\nCONFIDENCE\n\nSet confidence to:\n\n\"High\" — strong and direct evidence exists.\n\"Medium\" — some uncertainty exists.\n\"Low\" — important information is missing or unclear.\n\nRETURN VALID JSON ONLY.\n\nUse exactly this structure:\n\n{\n  \"candidate_name\": \"\",\n  \"match_score\": 0,\n  \"score_breakdown\": {\n    \"skills_match\": 0,\n    \"experience_match\": 0,\n    \"role_relevance\": 0\n  },\n  \"matching_skills\": [],\n  \"missing_skills\": [],\n  \"experience_match\": true,\n  \"relevant_experience\": \"\",\n  \"evidence\": [],\n  \"strengths\": [],\n  \"concerns\": [],\n  \"confidence\": \"\",\n  \"recommendation\": \"\"\n}\n\nThe score_breakdown must add up to match_score.\n\nDo not include markdown.\nDo not include explanations outside the JSON."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        736,
+        0
+      ],
+      "id": "a45d1506-bd98-4b41-9766-057a1c0c59ca",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.6-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        672,
+        208
+      ],
+      "id": "37786427-7cc6-4bcc-aa58-bfe3ffd35787",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BvUknmreXbsd0djc",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.recommendation }}",
+                    "rightValue": "Strong Match",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "42af1338-84d4-4c78-871f-5523e98e64c0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Strong Match"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "eb21ec5e-b7d0-4f7c-b022-c59ba611b96b",
+                    "leftValue": "={{ $json.recommendation }}",
+                    "rightValue": "Review",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Human Review Needed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "13305a56-b3fd-4782-84bc-13498e131ae2",
+                    "leftValue": "={{ $json.recommendation }}",
+                    "rightValue": "Low Match",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Low Match"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1536,
+        -16
+      ],
+      "id": "c2a39eec-1c5e-4078-86d4-4f7ecc07b43f",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "content": "      Store Data In\n      Google Sheets",
+        "height": 640
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1792,
+        -272
+      ],
+      "typeVersion": 1,
+      "id": "9fc8cc8c-f43d-479f-91cf-b408625077a1",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM",
+          "mode": "list",
+          "cachedResultName": "Candidate Job Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2023223863,
+          "mode": "list",
+          "cachedResultName": "Strong Match Candidate",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit#gid=2023223863"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Candidate Name": "={{ $json.candidate_name }}",
+            "Email": "={{ $json.email }}",
+            "Phone Number": "={{ $json.phone_number }}",
+            "Job Applied For": "={{ $json.job_applied_for }}",
+            "Resume": "={{ $json.resume }}",
+            "Match Score": "={{ $json.match_score }}",
+            "Recommendation": "={{ $json.recommendation }}",
+            "Experience Match": "={{ $json.experience_match }}",
+            "Matching Skills": "={{ $json.matching_skills }}",
+            "Missing Skills": "={{ $json.missing_skills }}",
+            "Relevant Experience": "={{ $json.relevant_experience }}",
+            "Strengths": "={{ $json.strengths }}",
+            "Concerns": "={{ $json.concerns }}",
+            "Timestamp": "={{ $json.timestamp }}",
+            "Skills Score": "={{ $json.skills_score }}",
+            "Experience Score": "={{ $json.experience_score }}",
+            "Role Relevance Score": "={{ $json.role_relevance_score }}",
+            "Confidence": "={{ $json.confidence }}",
+            "Evidence": "={{ $json.evidence }}",
+            "Job ID": "={{ $json.job_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Candidate Name",
+              "displayName": "Candidate Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Applied For",
+              "displayName": "Job Applied For",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Resume",
+              "displayName": "Resume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Match Score",
+              "displayName": "Match Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skills Score",
+              "displayName": "Skills Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Score",
+              "displayName": "Experience Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Role Relevance Score",
+              "displayName": "Role Relevance Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recommendation",
+              "displayName": "Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Match",
+              "displayName": "Experience Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Relevant Experience",
+              "displayName": "Relevant Experience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matching Skills",
+              "displayName": "Matching Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Missing Skills",
+              "displayName": "Missing Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Evidence",
+              "displayName": "Evidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Strengths",
+              "displayName": "Strengths",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Concerns",
+              "displayName": "Concerns",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1856,
+        -176
+      ],
+      "id": "63e9a8e7-1566-4baa-8558-f9770dffd33f",
+      "name": "Append Strong Match Data in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "T7X5y8VG4Z3sB00D",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM",
+          "mode": "list",
+          "cachedResultName": "Candidate Job Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1745608311,
+          "mode": "list",
+          "cachedResultName": "Human Review Needed Candidate",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit#gid=1745608311"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Candidate Name": "={{ $json.candidate_name }}",
+            "Email": "={{ $json.email }}",
+            "Phone Number": "={{ $json.phone_number }}",
+            "Job Applied For": "={{ $json.job_applied_for }}",
+            "Resume": "={{ $json.resume }}",
+            "Match Score": "={{ $json.match_score }}",
+            "Recommendation": "={{ $json.recommendation }}",
+            "Experience Match": "={{ $json.experience_match }}",
+            "Matching Skills": "={{ $json.matching_skills }}",
+            "Missing Skills": "={{ $json.missing_skills }}",
+            "Relevant Experience": "={{ $json.relevant_experience }}",
+            "Strengths": "={{ $json.strengths }}",
+            "Concerns": "={{ $json.concerns }}",
+            "Job ID": "={{ $json.job_id }}",
+            "Timestamp": "={{ $json.timestamp }}",
+            "Skills Score": "={{ $json.skills_score }}",
+            "Experience Score": "={{ $json.experience_score }}",
+            "Role Relevance Score": "={{ $json.role_relevance_score }}",
+            "Confidence": "={{ $json.confidence }}",
+            "Evidence": "={{ $json.evidence }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Candidate Name",
+              "displayName": "Candidate Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Applied For",
+              "displayName": "Job Applied For",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Resume",
+              "displayName": "Resume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Match Score",
+              "displayName": "Match Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skills Score",
+              "displayName": "Skills Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Score",
+              "displayName": "Experience Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Role Relevance Score",
+              "displayName": "Role Relevance Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recommendation",
+              "displayName": "Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Match",
+              "displayName": "Experience Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Relevant Experience",
+              "displayName": "Relevant Experience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matching Skills",
+              "displayName": "Matching Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Missing Skills",
+              "displayName": "Missing Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Evidence",
+              "displayName": "Evidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Strengths",
+              "displayName": "Strengths",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Concerns",
+              "displayName": "Concerns",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1856,
+        0
+      ],
+      "id": "dcbfe407-1546-4d5d-8013-d61aef40884b",
+      "name": "Append Human Review Needed Data in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "T7X5y8VG4Z3sB00D",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM",
+          "mode": "list",
+          "cachedResultName": "Candidate Job Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1314520319,
+          "mode": "list",
+          "cachedResultName": "Low Match Candidate",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1esi_U996UrwZiLc1BY30x0-zDTJjLNXUIZcB2tdRXfM/edit#gid=1314520319"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Candidate Name": "={{ $json.candidate_name }}",
+            "Email": "={{ $json.email }}",
+            "Phone Number": "={{ $json.phone_number }}",
+            "Job Applied For": "={{ $json.job_applied_for }}",
+            "Resume": "={{ $json.resume }}",
+            "Match Score": "={{ $json.match_score }}",
+            "Recommendation": "={{ $json.recommendation }}",
+            "Experience Match": "={{ $json.experience_match }}",
+            "Matching Skills": "={{ $json.matching_skills }}",
+            "Missing Skills": "={{ $json.missing_skills }}",
+            "Relevant Experience": "={{ $json.relevant_experience }}",
+            "Strengths": "={{ $json.strengths }}",
+            "Concerns": "={{ $json.concerns }}",
+            "Job ID": "={{ $json.job_id }}",
+            "Timestamp": "={{ $json.timestamp }}",
+            "Skills Score": "={{ $json.skills_score }}",
+            "Experience Score": "={{ $json.experience_score }}",
+            "Role Relevance Score": "={{ $json.role_relevance_score }}",
+            "Confidence": "={{ $json.confidence }}",
+            "Evidence": "={{ $json.evidence }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Candidate Name",
+              "displayName": "Candidate Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Applied For",
+              "displayName": "Job Applied For",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Resume",
+              "displayName": "Resume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Match Score",
+              "displayName": "Match Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skills Score",
+              "displayName": "Skills Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Score",
+              "displayName": "Experience Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Role Relevance Score",
+              "displayName": "Role Relevance Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recommendation",
+              "displayName": "Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Match",
+              "displayName": "Experience Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Relevant Experience",
+              "displayName": "Relevant Experience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matching Skills",
+              "displayName": "Matching Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Missing Skills",
+              "displayName": "Missing Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Evidence",
+              "displayName": "Evidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Strengths",
+              "displayName": "Strengths",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Concerns",
+              "displayName": "Concerns",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1856,
+        192
+      ],
+      "id": "0a0a7580-f7aa-42b2-8c4d-b11621a7280e",
+      "name": "Append Low Match Data in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "T7X5y8VG4Z3sB00D",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Added Job ID Field": {
+      "main": [
+        [
+          {
+            "node": "Append New Post Data in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New Post Or JD Added(Google Sheets Trigger)": {
+      "main": [
+        [
+          {
+            "node": "Added Job ID Field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New Candidate Data Added (Google Sheets Trigger)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Download Pdf file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Pdf file": {
+      "main": [
+        [
+          {
+            "node": "Extract Pdf Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Pdf Data": {
+      "main": [
+        [
+          {
+            "node": "Get Job Description from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job Description from sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean Data": {
+      "main": [
+        [
+          {
+            "node": "All info added and cleaned",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "All info added and cleaned": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Clean Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Append Strong Match Data in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append Human Review Needed Data in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append Low Match Data in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c8ece407-d917-4bd3-b761-63b0b5ac85a5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "114ef695bbbc2ffb68cc55d2b690dec5deff5c01dab8918da0205df2fae1b8fe"
+  },
+  "id": "BpKO2GpXZyPdyWWD",
+  "tags": []
+}
